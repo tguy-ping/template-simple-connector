@@ -10,3 +10,9 @@ exports.badData = {
     params: 's',
   },
 };
+
+exports.b64Data = {
+  properties: {
+    textToEncode: 'I Loveee Ping',
+  },
+};

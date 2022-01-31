@@ -8,7 +8,10 @@ const sinon = require('sinon');
 const sdk = require('@skinternal/skconnectorsdk');
 const api = require('../api');
 
-const { handle_capability_postHTTP } = require('../index');
+const {
+  handle_capability_postHTTP,
+  handle_capability_base64Encode,
+} = require('../index');
 
 const props = require('./data/properties');
 const { assert } = require('sinon');
@@ -41,7 +44,25 @@ describe('Unit Tests', () => {
     handle_capability_postHTTP(props.badData)
       .catch((error) => {
         console.log(`error is: ${JSON.stringify(error)}`);
-        expect(error.code).to.be.a('string');
+        expect(error.code).to.be.a('object');
+      })
+      .finally(() => {
+        done();
+      });
+  });
+
+  it('successfully base64encode', (done) => {
+    handle_capability_base64Encode(props.b64Data)
+      .then((res) => {
+        expect(res).to.be.an('object');
+        expect(res.output).to.be.an('string');
+        expect(res.output.rawResponse).to.be.an('object');
+        expect(res.output.rawResponse).should.have.property('prop');
+        done();
+      })
+      .catch((error) => {
+        console.log(`error is: ${JSON.stringify(error)}`);
+        // expect(error.code).to.be.a('string');
       })
       .finally(() => {
         done();

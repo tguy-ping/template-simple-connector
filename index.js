@@ -2,6 +2,7 @@ const sdk = require('@skinternal/skconnectorsdk');
 const { serr, compileErr, logger } = require('@skinternal/skconnectorsdk');
 const { get } = require('lodash');
 const connectorManifest = require('./manifests/manifest');
+const b64 = require('base64-async');
 
 const redisList = 'connectorExample';
 const api = require('./api');
@@ -92,10 +93,35 @@ const handle_capability_postHTTP = async ({ properties }) => {
   }
 };
 
+const handle_capability_base64Encode = async ({ properties }) => {
+  logger.info('overriding handle_capability_base64Encode');
+  try {
+    console.log(properties);
+    const { textToEncode } = properties;
+    const response = Buffer.from(textToEncode).toString('base64');
+    console.log(`encoded response is: ${response}`);
+    return {
+      output: {
+        rawResponse: response,
+      },
+      eventName: 'continue',
+    };
+  } catch (err) {
+    return {
+      output: {
+        rawResponse: {},
+      },
+      eventName: 'continue',
+    };
+  }
+};
+
 sdk.methods.handle_capability_postHTTP = handle_capability_postHTTP;
+sdk.methods.handle_capability_base64Encode = handle_capability_base64Encode;
 
 initialize();
 
 module.exports = {
   handle_capability_postHTTP,
+  handle_capability_base64Encode,
 };

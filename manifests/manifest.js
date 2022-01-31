@@ -182,6 +182,16 @@ const connectorExample = {
        */
       info: 'The body of the POST call',
     },
+    /*
+     Here we define the 'textToEncode' property, which is later declared as something that is
+    assigned a value in the flow
+     */
+    textToEncode: {
+      displayName: 'Text to Base64 Encode',
+      info: 'Text to Base64 Encode',
+      preferredControlType: 'textField',
+      enableParameters: true,
+    },
   },
   /*
    the 'capabilities' object enumerates the capabilities that the orchestration
@@ -269,14 +279,14 @@ const connectorExample = {
                    */
                   type: 'string',
                   description: 'The body of the HTTP request',
-                }
+                },
               },
               /*
                the 'required' array lists the properties that are required in the validation
                of the input data to the capability
-               */ 
+               */
               required: ['body', 'url'],
-            }
+            },
           },
           /* 
            example of a valid input data
@@ -284,10 +294,10 @@ const connectorExample = {
           example: {
             properties: {
               body: '{"hello": "world"}',
-              url: 'https://httpbin.org'
-            }
-          }
-        }
+              url: 'https://httpbin.org',
+            },
+          },
+        },
       },
       /*
       the output schema for data validation
@@ -301,11 +311,46 @@ const connectorExample = {
             },
             statusCode: {
               type: 'number',
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
+    /*
+      the 'postHTTP' capability is the only capability implemented in this example connector.
+      Note that the name must match the handle_capability_< capabilty_name_here > in index.js
+     */
+    base64Encode: {
+      type: 'action',
+      title: 'Base64 Encode string',
+      subTitle: 'Base64 Encode string',
+      respondToUser: true,
+      apiEnabled: true,
+      inputs: [],
+      flowConfigView: {
+        items: [
+          {
+            propertyName: 'textToEncode',
+          },
+        ],
+      },
+      payloadInputSchema: {
+        default: {
+          type: 'object',
+          properties: {
+            properties: {
+              type: 'object',
+              properties: {
+                textToEncode: {
+                  type: 'string',
+                  description: 'Text to Base64 Encode',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   /*
     the 'accountConfigView' object stores an 'items' array of the properties 
@@ -315,7 +360,7 @@ const connectorExample = {
    */
   accountConfigView: {
     items: [{ propertyName: 'url' }],
-  }
+  },
 };
 
 module.exports = connectorExample;
