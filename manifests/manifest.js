@@ -316,10 +316,6 @@ const connectorExample = {
         },
       },
     },
-    /*
-      the 'postHTTP' capability is the only capability implemented in this example connector.
-      Note that the name must match the handle_capability_< capabilty_name_here > in index.js
-     */
     base64Encode: {
       type: 'action',
       title: 'Base64 Encode string',

@@ -2,7 +2,6 @@ const sdk = require('@skinternal/skconnectorsdk');
 const { serr, compileErr, logger } = require('@skinternal/skconnectorsdk');
 const { get } = require('lodash');
 const connectorManifest = require('./manifests/manifest');
-const b64 = require('base64-async');
 
 const redisList = 'connectorExample';
 const api = require('./api');
