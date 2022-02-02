@@ -233,6 +233,20 @@ And this line after 124
   handle_capability_base64Encode,
 ```
 
+The bottom of index.js should look like: 
+
+```
+sdk.methods.handle_capability_postHTTP = handle_capability_postHTTP;
+sdk.methods.handle_capability_base64Encode = handle_capability_base64Encode;
+
+initialize();
+
+module.exports = {
+  handle_capability_postHTTP,
+  handle_capability_base64Encode,
+};
+```
+
 ## Test Capability
 
 Now that all the code is prepared, let's test it.
