@@ -13,6 +13,6 @@ exports.badData = {
 
 exports.b64Data = {
   properties: {
-    textToEncode: 'I Loveee Ping',
+    textToEncode: 'I Love Ping',
   },
 };
