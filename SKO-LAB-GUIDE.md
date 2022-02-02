@@ -183,6 +183,7 @@ const handle_capability_base64Encode = async ({ properties }) => {
     };
   }
 };
+
 ```
 
 On index.js enter a new line after 94. On the newline (95) backspace to left margin and paste the code block.
@@ -230,6 +231,20 @@ And this line after 124
 
 ```js
   handle_capability_base64Encode,
+```
+
+The bottom of index.js should look like: 
+
+```
+sdk.methods.handle_capability_postHTTP = handle_capability_postHTTP;
+sdk.methods.handle_capability_base64Encode = handle_capability_base64Encode;
+
+initialize();
+
+module.exports = {
+  handle_capability_postHTTP,
+  handle_capability_base64Encode,
+};
 ```
 
 ## Test Capability
