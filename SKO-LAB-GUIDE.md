@@ -11,15 +11,18 @@ Steps for the lab include:
 
 - [Manifest.js](#manifest) - Add a capability definition.
 - [Index.js](#index) - Add code to be called per definition on manifest.
-- Update Flow to use the new capability
+- [Test new capability](#test-capability)
+  - Restart API and wait for health
+  - Upload Manifest to configuration
+  - Update Flow to use the new capability
 
 ## Manifest
 
-Open `/home/coder/myconnector/manifests/manifest.js` in your browser vscode.
+Open `myconnector/manifests/manifest.js` in your browser vscode.
 
 > Some lines on manifest are very long, you can turn off word-wrap with option+z on mac (or via hamburger menu>view>word-wrap )
 
-Make the following changes on myconnector/manifests/manifest.js
+Make the following changes on `myconnector/manifests/manifest.js`
 
 Copy this code block (all the way to left margin to maintain indentation)
 
@@ -181,3 +184,80 @@ const handle_capability_base64Encode = async ({ properties }) => {
   }
 };
 ```
+
+On index.js enter a new line after 94. On the newline (95) backspace to left margin and paste the code block.
+
+The result should be like:
+
+```js
+    throw compileErr('postHTTP', err);
+  }
+};
+
+const handle_capability_base64Encode = async ({ properties }) => {
+  logger.info('overriding handle_capability_base64Encode');
+  try {
+    console.log(properties);
+    const { textToEncode } = properties;
+    const response = Buffer.from(textToEncode).toString('base64');
+    console.log(`encoded response is: ${response}`);
+    return {
+      output: {
+        rawResponse: response,
+      },
+      eventName: 'continue',
+    };
+  } catch (err) {
+    return {
+      output: {
+        rawResponse: {},
+      },
+      eventName: 'continue',
+    };
+  }
+};
+
+sdk.methods.handle_capability_postHTTP = handle_capability_postHTTP;
+```
+
+Enter this line on a newline below 118:
+
+```js
+sdk.methods.handle_capability_base64Encode = handle_capability_base64Encode;
+```
+
+And this line after 124
+
+```js
+  handle_capability_base64Encode,
+```
+
+## Test Capability
+
+Now that all the code is prepared, let's test it.
+
+Upload the manifest to MongoDB so it can be read and available in your admin portal.
+
+run `sh ~/env-prep.sh`
+
+After it completes, a yellow flower-box will be shown with commands and an instruction similar to `update-manifest`
+
+Run the mentioned command.
+
+Next, the API component must be restarted. From your dashboard through https://davinci.pingidentity.com find your corresponding project.
+
+Look for and click the restart button.
+It looks a bit like: ↩️
+If you hover above it you will see 'Restart API <project-name>'
+
+> Click refresh as desired to update the countdown.
+
+Once the countdown completes, it is time to update the flow in Admin Portal.
+
+Navigate to your flow in Admin Portal
+
+If you're lucky, click the example connector node (first node). Then the back arrow next to 'Action' which looks like `<`. You should see your new 'Base64 Encode String' capability here. Select the capability and enter some text in the textbox that appears.
+
+Save, Deploy, Try Flow!
+
+If you're _unlucky_ you may need to create a new connection in the 'Connections' item in menu to get the capability. After this, come back to your flow, right-click the node and select 'Changed Linked Connection...' and choose the new connection.
