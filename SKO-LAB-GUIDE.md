@@ -183,6 +183,7 @@ const handle_capability_base64Encode = async ({ properties }) => {
     };
   }
 };
+
 ```
 
 On index.js enter a new line after 94. On the newline (95) backspace to left margin and paste the code block.
